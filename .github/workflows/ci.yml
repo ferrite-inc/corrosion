@@ -1,0 +1,79 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - if: github.event_name != 'workflow_dispatch'
+        id: changes
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            rust:
+              - '.github/workflows/ci.yml'
+              - 'Cargo.toml'
+              - 'Cargo.lock'
+              - 'rustfmt.toml'
+              - 'src/**'
+              - 'sdks/typescript/src/generated.ts'
+            sdk:
+              - '.github/workflows/ci.yml'
+              - 'sdks/typescript/**'
+
+      - if: &rust ${{ github.event_name == 'workflow_dispatch' || steps.changes.outputs.rust == 'true' }}
+        run: |
+          rustup toolchain install nightly --profile minimal --component rustfmt --no-self-update
+          cargo +nightly fmt --all -- --check
+
+      - if: *rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - if: *rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - if: *rust
+        run: cargo clippy --locked --all-features -- -D warnings
+
+      - if: &sdk ${{ github.event_name == 'workflow_dispatch' || steps.changes.outputs.rust == 'true' || steps.changes.outputs.sdk == 'true' }}
+        uses: voidzero-dev/setup-vp@v1.21.2
+        with:
+          working-directory: sdks/typescript
+          node-version: "24"
+          cache: true
+          cache-save: ${{ github.ref == 'refs/heads/main' }}
+          run-install: |
+            args: ['--frozen-lockfile']
+
+      - if: *rust
+        working-directory: sdks/typescript
+        run: |
+          vp run generate:types
+          git diff --exit-code -- ../../Cargo.lock src/generated.ts
+
+      - if: *sdk
+        working-directory: sdks/typescript
+        run: |
+          vp pack
+          vp check
