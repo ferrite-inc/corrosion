@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: daily
+      timezone: Europe/Warsaw
+
+  - package-ecosystem: npm
+    directory: /sdks/typescript
+    schedule:
+      interval: daily
+      timezone: Europe/Warsaw
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+      timezone: Europe/Warsaw
