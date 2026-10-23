@@ -1,0 +1,16 @@
+{
+  "name": "@corrosion/example-bot",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vp -C ../.. pack && node --env-file-if-exists=.env src/index.ts"
+  },
+  "dependencies": {
+    "@corrosion/client": "workspace:*",
+    "discord.js": "^14.27.0"
+  },
+  "engines": {
+    "node": ">=24.17.0"
+  }
+}

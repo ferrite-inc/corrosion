@@ -1,0 +1,47 @@
+{
+  "name": "@corrosion/client",
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./djs": "./dist/djs.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "generate:types": "cargo run --manifest-path ../../Cargo.toml --features bindings -- --export-types && vp fmt src/generated.ts",
+    "prepublishOnly": "vp run generate:types && vp pack"
+  },
+  "dependencies": {
+    "eventsource": "^5.1.3",
+    "valibot": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "discord.js": "^14.27.0",
+    "typescript": "^7.0.2",
+    "vite-plus": "1.3.0"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.27.0"
+  },
+  "peerDependenciesMeta": {
+    "discord.js": {
+      "optional": true
+    }
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.14.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

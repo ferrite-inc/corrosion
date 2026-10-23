@@ -1,0 +1,6 @@
+packages:
+  - examples/*
+
+peerDependencyRules:
+  allowedVersions:
+    vite: "1.3.0"

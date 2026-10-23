@@ -1,0 +1,30 @@
+[package]
+name = "corrosion"
+version = "0.0.0"
+edition = "2024"
+
+[features]
+bindings = ["dep:ts-rs"]
+
+[dependencies]
+anyhow = "1"
+async-trait = "0.1"
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio", "tracing"] }
+figment = { version = "0.10", features = ["env", "toml"] }
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_with = { version = "3", default-features = false }
+songbird = { version = "0.6", default-features = false, features = ["driver", "rustls", "tungstenite"] }
+subtle = "2"
+symphonia = { version = "0.5", default-features = false, features = ["mp3"] }
+thiserror = "2"
+tokio = { version = "1", default-features = false, features = ["macros", "net", "rt-multi-thread", "signal", "sync", "time"] }
+tokio-stream = { version = "0.1", default-features = false, features = ["sync"] }
+tokio-util = { version = "0.7", default-features = false, features = ["rt"] }
+tracing = { version = "0.1", default-features = false, features = ["std"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+ts-rs = { version = "12", optional = true, features = ["uuid-impl", "no-serde-warnings"] }
+url = "2"
+uuid = { version = "1", features = ["serde", "v4"] }
