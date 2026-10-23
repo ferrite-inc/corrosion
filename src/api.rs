@@ -1,8 +1,5 @@
 mod v1;
 
-#[cfg(feature = "bindings")]
-pub(crate) use v1::{Enqueue, UpdateVoice};
-
 use std::sync::Arc;
 
 use axum::{
@@ -16,6 +13,8 @@ use axum::{
     response::{IntoResponse, Response},
 };
 use subtle::ConstantTimeEq;
+#[cfg(feature = "bindings")]
+pub(crate) use v1::{Enqueue, UpdateVoice};
 
 use crate::runtime::Runtime;
 
