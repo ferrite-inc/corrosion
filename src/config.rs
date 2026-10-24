@@ -6,6 +6,8 @@ use figment::{
     providers::{Env, Format, Toml},
 };
 use serde::Deserialize;
+use serde_with::{As, DisplayFromStr};
+use tracing::level_filters::LevelFilter;
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -24,7 +26,8 @@ pub(crate) struct ServerConfig {
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct LogConfig {
-    pub(crate) level: String,
+    #[serde(with = "As::<DisplayFromStr>")]
+    pub(crate) level: LevelFilter,
 }
 
 pub(crate) fn load() -> Result<Config> {

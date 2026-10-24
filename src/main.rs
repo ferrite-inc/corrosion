@@ -13,7 +13,7 @@ use std::io;
 
 use anyhow::{Context, Error, Result};
 use tokio::net::TcpListener;
-use tracing::{error, info, level_filters::LevelFilter};
+use tracing::{error, info};
 
 use crate::runtime::Runtime;
 
@@ -25,13 +25,8 @@ async fn main() -> Result<()> {
     }
 
     let config = config::load()?;
-    let level = config
-        .log
-        .level
-        .parse::<LevelFilter>()
-        .context("invalid log level")?;
     tracing_subscriber::fmt()
-        .with_max_level(level)
+        .with_max_level(config.log.level)
         .try_init()
         .map_err(Error::from_boxed)?;
 
