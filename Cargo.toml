@@ -24,7 +24,7 @@ tokio = { version = "1", default-features = false, features = ["macros", "net", 
 tokio-stream = { version = "0.1", default-features = false, features = ["sync"] }
 tokio-util = { version = "0.7", default-features = false, features = ["rt"] }
 tracing = { version = "0.1", default-features = false, features = ["std"] }
-tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "ansi"] }
 ts-rs = { version = "12", optional = true, features = ["uuid-impl", "no-serde-warnings"] }
 url = "2"
 uuid = { version = "1", features = ["serde", "v4"] }
