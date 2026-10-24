@@ -303,8 +303,7 @@ impl Player {
         self.notifications.close();
         self.stop_current();
         self.queue.clear();
-        self.workers.abort_all();
-        while self.workers.join_next().await.is_some() {}
+        self.workers.shutdown().await;
         self.driver.stop();
         self.driver.leave();
     }
