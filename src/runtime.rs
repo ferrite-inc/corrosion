@@ -5,7 +5,7 @@ use std::{
     time::Duration,
 };
 
-use songbird::driver::{DisposalThread, get_default_scheduler};
+use songbird::driver::DisposalThread;
 use tokio_util::sync::CancellationToken;
 use uuid::Uuid;
 
@@ -25,9 +25,7 @@ impl Runtime {
             .connect_timeout(Duration::from_secs(10))
             .read_timeout(Duration::from_secs(15))
             .build()?;
-        let config = songbird::Config::default()
-            .disposer(DisposalThread::run())
-            .scheduler(get_default_scheduler().clone());
+        let config = songbird::Config::default().disposer(DisposalThread::run());
         Ok(Self {
             inner: Arc::new(Inner {
                 registry: Mutex::new(Registry::default()),
