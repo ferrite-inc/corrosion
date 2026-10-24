@@ -279,7 +279,7 @@ impl Player {
                     self.apply(command)
                 }
                 Some(notification) = self.notifications.recv() => self.notify(notification),
-                Some(result) = self.workers.join_next(), if !self.workers.is_empty() => {
+                Some(result) = self.workers.join_next() => {
                     match result {
                         Ok(notification) => self.notify(notification),
                         Err(error) => {
