@@ -1,6 +1,6 @@
 use std::{net::SocketAddr, path::Path};
 
-use anyhow::Context;
+use anyhow::{Context, Result};
 use figment::{
     Figment,
     providers::{Env, Format, Toml},
@@ -27,7 +27,7 @@ pub(crate) struct LogConfig {
     pub(crate) level: String,
 }
 
-pub(crate) fn load() -> anyhow::Result<Config> {
+pub(crate) fn load() -> Result<Config> {
     let mut figment = Figment::from(Toml::string(include_str!("config/defaults.toml")));
     if Path::new("corrosion.toml").try_exists()? {
         figment = figment.merge(Toml::file_exact("corrosion.toml"));

@@ -1,6 +1,6 @@
 use std::{fs, path::Path};
 
-use anyhow::Context;
+use anyhow::{Context, Result};
 use ts_rs::{Config, TS};
 
 use crate::{
@@ -9,7 +9,7 @@ use crate::{
     resolver::Resolver,
 };
 
-pub(crate) fn export() -> anyhow::Result<()> {
+pub(crate) fn export() -> Result<()> {
     let config = Config::new();
     let declarations = [
         Resolver::decl(&config),

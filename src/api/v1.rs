@@ -10,9 +10,10 @@ use axum::{
     },
     http::StatusCode,
     response::{IntoResponse, Response},
-    routing::{get, post, put},
+    routing::{delete, get, post, put},
 };
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use uuid::Uuid;
 
 use crate::{
@@ -28,10 +29,7 @@ type PlayerPath = Result<Path<(Uuid, String)>, PathRejection>;
 pub(super) fn router() -> Router<Runtime> {
     Router::new()
         .route("/sessions", post(create_session))
-        .route(
-            "/sessions/{session}",
-            axum::routing::delete(destroy_session),
-        )
+        .route("/sessions/{session}", delete(destroy_session))
         .route("/sessions/{session}/events", get(events::subscribe))
         .route("/sessions/{session}/players", get(list_players))
         .route(
@@ -218,7 +216,7 @@ impl Error {
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        (self.status, Json(serde_json::json!({ "error": self.code }))).into_response()
+        (self.status, Json(json!({ "error": self.code }))).into_response()
     }
 }
 

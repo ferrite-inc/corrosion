@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use async_trait::async_trait;
 use reqwest::Client;
 use songbird::{
@@ -34,7 +36,7 @@ pub(super) fn play(
                     notifications: notifications.clone(),
                 },
             ),
-            std::time::Duration::ZERO,
+            Duration::ZERO,
         );
     }
     driver.play_only(track)

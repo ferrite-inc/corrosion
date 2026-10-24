@@ -12,6 +12,7 @@ use axum::{
     middleware::{self, Next},
     response::{IntoResponse, Response},
 };
+use serde_json::json;
 use subtle::ConstantTimeEq;
 #[cfg(feature = "bindings")]
 pub(crate) use v1::{Enqueue, UpdateVoice};
@@ -50,7 +51,7 @@ async fn authenticate(State(token): State<Arc<str>>, request: Request, next: Nex
         return (
             StatusCode::UNAUTHORIZED,
             [(WWW_AUTHENTICATE, "Bearer")],
-            Json(serde_json::json!({ "error": "unauthorized" })),
+            Json(json!({ "error": "unauthorized" })),
         )
             .into_response();
     }

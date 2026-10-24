@@ -9,10 +9,15 @@ use serde_with::{As, DisplayFromStr};
 use songbird::{Config, Driver, tracks::TrackHandle};
 use thiserror::Error;
 use tokio::{
-    sync::{broadcast, mpsc, oneshot},
+    sync::{
+        broadcast,
+        mpsc::{self, error::TrySendError},
+        oneshot,
+    },
     task::{AbortHandle, JoinSet},
 };
 use tokio_util::{sync::CancellationToken, task::TaskTracker};
+use tracing::error;
 use uuid::Uuid;
 pub(crate) use voice::VoiceParameters;
 
@@ -127,8 +132,8 @@ impl PlayerHandle {
         self.commands
             .try_send(command(reply))
             .map_err(|error| match error {
-                mpsc::error::TrySendError::Full(_) => Error::Busy,
-                mpsc::error::TrySendError::Closed(_) => Error::Closed,
+                TrySendError::Full(_) => Error::Busy,
+                TrySendError::Closed(_) => Error::Closed,
             })?;
         response.await.map_err(|_| Error::Closed)?
     }
@@ -279,7 +284,7 @@ impl Player {
                         Ok(notification) => self.notify(notification),
                         Err(error) => {
                             if !error.is_cancelled() {
-                                tracing::error!(%error, "player worker failed");
+                                error!(%error, "player worker failed");
                             }
                             false
                         }

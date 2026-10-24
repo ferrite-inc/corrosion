@@ -11,7 +11,7 @@ mod session;
 
 use std::io;
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Error, Result};
 use tokio::net::TcpListener;
 use tracing::{error, info, level_filters::LevelFilter};
 
@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
     tracing_subscriber::fmt()
         .with_max_level(level)
         .try_init()
-        .map_err(anyhow::Error::from_boxed)?;
+        .map_err(Error::from_boxed)?;
 
     let runtime = Runtime::new().context("failed to initialize audio resources")?;
     let listener = TcpListener::bind(config.server.address)
