@@ -9,7 +9,7 @@ bindings = ["dep:ts-rs"]
 [dependencies]
 anyhow = "1"
 async-trait = "0.1"
-axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio", "tracing"] }
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "macros", "tokio", "tracing"] }
 figment = { version = "0.10", features = ["env", "toml"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream"] }

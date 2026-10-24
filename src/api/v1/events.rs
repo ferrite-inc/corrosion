@@ -1,18 +1,21 @@
 use axum::{
-    extract::{Path, State},
+    extract::State,
     response::sse::{Event, KeepAlive, Sse},
 };
 use futures_util::{Stream, StreamExt as _};
 use tokio_stream::{StreamExt, wrappers::BroadcastStream};
+use uuid::Uuid;
 
-use super::{Error, SessionPath};
-use crate::{runtime::Runtime, session};
+use crate::{
+    api::{error::Error, extract::Path},
+    runtime::Runtime,
+    session,
+};
 
 pub(super) async fn subscribe(
     State(runtime): State<Runtime>,
-    path: SessionPath,
+    Path(id): Path<Uuid>,
 ) -> Result<Sse<impl Stream<Item = Result<Event, axum::Error>>>, Error> {
-    let Path(id) = path?;
     let session = runtime.session(id)?;
     let stream = BroadcastStream::new(session.events.subscribe())
         .map_while(|event| event.ok().map(encode))
