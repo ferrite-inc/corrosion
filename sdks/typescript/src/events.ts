@@ -50,15 +50,15 @@ export function subscribe(
     );
     listen("track_ended", TrackEndedEventSchema, (event) => emitter.emit("track_ended", event));
 
-    function listen<T>(name: string, schema: v.GenericSchema<T>, emit: (value: T) => void): void {
+    function listen<T>(
+      name: string,
+      schema: v.GenericSchema<unknown, T>,
+      emit: (value: T) => void,
+    ): void {
       source.addEventListener(name, (event) => {
         let payload: T;
         try {
-          const value: unknown = JSON.parse(event.data);
-          if (!v.is(schema, value)) {
-            throw new Error("Unexpected event payload");
-          }
-          payload = value;
+          payload = v.parse(schema, JSON.parse(event.data));
         } catch (cause) {
           if (emitter.listenerCount("error") > 0) {
             emitter.emit("error", new Error(`Invalid ${name} event`, { cause }));
