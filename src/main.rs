@@ -11,9 +11,10 @@ mod session;
 
 use std::io;
 
-use anyhow::{Context, Error, Result};
+use anyhow::{Context, Result};
 use tokio::net::TcpListener;
 use tracing::{error, info};
+use tracing_subscriber::{filter::Targets, fmt, prelude::*};
 
 use crate::{config::LogConfig, runtime::Runtime};
 
@@ -44,10 +45,14 @@ async fn main() -> Result<()> {
 }
 
 fn init_logging(config: &LogConfig) -> Result<()> {
-    tracing_subscriber::fmt()
-        .with_max_level(config.level)
+    let filter = Targets::new()
+        .with_default(config.external.level)
+        .with_target("corrosion", config.level);
+
+    tracing_subscriber::registry()
+        .with(fmt::layer().with_filter(filter))
         .try_init()
-        .map_err(Error::from_boxed)
+        .context("failed to initialize logging")
 }
 
 async fn shutdown_on_signal(runtime: Runtime) {

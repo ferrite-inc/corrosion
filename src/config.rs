@@ -28,6 +28,14 @@ pub(crate) struct ServerConfig {
 pub(crate) struct LogConfig {
     #[serde(with = "As::<DisplayFromStr>")]
     pub(crate) level: LevelFilter,
+    pub(crate) external: ExternalLogConfig,
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+pub(crate) struct ExternalLogConfig {
+    #[serde(with = "As::<DisplayFromStr>")]
+    pub(crate) level: LevelFilter,
 }
 
 pub(crate) fn load() -> Result<Config> {

@@ -4,3 +4,6 @@ token = ""
 
 [log]
 level = "info"
+
+[log.external]
+level = "warn"
