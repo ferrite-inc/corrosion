@@ -32,10 +32,10 @@ audio.on("disconnect", console.error);
 audio.on("error", console.error);
 
 for (const name of [
-  "player.changed",
-  "player.destroyed",
-  "track.started",
-  "track.ended",
+  "player_changed",
+  "player_destroyed",
+  "track_started",
+  "track_ended",
 ] as const) {
   audio.on(name, (event) => console.log(`[corrosion:event] ${name}`, event));
 }

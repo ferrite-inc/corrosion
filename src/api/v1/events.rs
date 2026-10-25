@@ -25,10 +25,10 @@ pub(super) async fn subscribe(
 
 fn encode(event: session::Event) -> Result<Event, axum::Error> {
     let name = match &event {
-        session::Event::PlayerChanged { .. } => "player.changed",
-        session::Event::PlayerDestroyed { .. } => "player.destroyed",
-        session::Event::TrackStarted { .. } => "track.started",
-        session::Event::TrackEnded { .. } => "track.ended",
+        session::Event::PlayerChanged { .. } => "player_changed",
+        session::Event::PlayerDestroyed { .. } => "player_destroyed",
+        session::Event::TrackStarted { .. } => "track_started",
+        session::Event::TrackEnded { .. } => "track_ended",
     };
     Event::default().event(name).json_data(event)
 }

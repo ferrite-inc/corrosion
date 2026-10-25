@@ -30,8 +30,8 @@ export interface ClientEvents {
   connect: [];
   disconnect: [error: Error];
   error: [error: Error];
-  "player.changed": [event: PlayerEvent];
-  "player.destroyed": [event: PlayerEvent];
-  "track.started": [event: TrackStartedEvent];
-  "track.ended": [event: TrackEndedEvent];
+  player_changed: [event: PlayerEvent];
+  player_destroyed: [event: PlayerEvent];
+  track_started: [event: TrackStartedEvent];
+  track_ended: [event: TrackEndedEvent];
 }

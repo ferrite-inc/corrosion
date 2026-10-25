@@ -41,14 +41,14 @@ export function subscribe(
       emitter.emit("disconnect", error);
     };
 
-    listen("player.changed", PlayerEventSchema, (event) => emitter.emit("player.changed", event));
-    listen("player.destroyed", PlayerEventSchema, (event) =>
-      emitter.emit("player.destroyed", event),
+    listen("player_changed", PlayerEventSchema, (event) => emitter.emit("player_changed", event));
+    listen("player_destroyed", PlayerEventSchema, (event) =>
+      emitter.emit("player_destroyed", event),
     );
-    listen("track.started", TrackStartedEventSchema, (event) =>
-      emitter.emit("track.started", event),
+    listen("track_started", TrackStartedEventSchema, (event) =>
+      emitter.emit("track_started", event),
     );
-    listen("track.ended", TrackEndedEventSchema, (event) => emitter.emit("track.ended", event));
+    listen("track_ended", TrackEndedEventSchema, (event) => emitter.emit("track_ended", event));
 
     function listen<T>(name: string, schema: v.GenericSchema<T>, emit: (value: T) => void): void {
       source.addEventListener(name, (event) => {
