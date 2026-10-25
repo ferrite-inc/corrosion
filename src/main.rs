@@ -28,6 +28,11 @@ async fn main() -> Result<()> {
     let config = config::load()?;
 
     init_logging(&config.log)?;
+    info!(
+        "corrosion v{} (rev {})",
+        env!("CARGO_PKG_VERSION"),
+        env!("CARGO_GIT_REVISION")
+    );
 
     let runtime = Runtime::new().context("failed to initialize audio resources")?;
     let listener = TcpListener::bind(config.server.address)
