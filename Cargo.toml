@@ -31,3 +31,8 @@ bindings = ["dep:ts-rs"]
 
 [profile.dev.package.serenity-voice-model]
 debug-assertions = false
+
+[profile.release]
+strip = "debuginfo"
+lto = "fat"
+codegen-units = 1
