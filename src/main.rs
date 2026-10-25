@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
     let listener = TcpListener::bind(config.server.address)
         .await
         .context("failed to bind server")?;
-    info!(address = %listener.local_addr()?, "listening");
+    info!("listening on {}", listener.local_addr()?);
 
     let app = api::router(runtime.clone(), config.server.token);
     let result = axum::serve(listener, app)
@@ -50,7 +50,12 @@ fn init_logging(config: &LogConfig) -> Result<()> {
         .with_target("corrosion", config.level);
 
     tracing_subscriber::registry()
-        .with(fmt::layer().with_filter(filter))
+        .with(
+            fmt::layer()
+                .compact()
+                .with_target(false)
+                .with_filter(filter),
+        )
         .try_init()
         .context("failed to initialize logging")
 }
@@ -59,6 +64,7 @@ async fn shutdown_on_signal(runtime: Runtime) {
     if let Err(error) = wait_for_shutdown_signal().await {
         error!(%error, "failed to listen for shutdown signal");
     }
+    info!("shutting down..");
     runtime.shutdown().await;
 }
 
