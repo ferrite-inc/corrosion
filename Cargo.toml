@@ -3,9 +3,6 @@ name = "corrosion"
 version = "0.0.0"
 edition = "2024"
 
-[features]
-bindings = ["dep:ts-rs"]
-
 [dependencies]
 anyhow = "1"
 async-trait = "0.1"
@@ -24,7 +21,10 @@ tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "signal
 tokio-stream = { version = "0.1", default-features = false, features = ["sync"] }
 tokio-util = { version = "0.7", features = ["rt"] }
 tracing = { version = "0.1", default-features = false, features = ["std"] }
-tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt", "ansi"] }
-ts-rs = { version = "12", optional = true, features = ["uuid-impl", "no-serde-warnings"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["ansi", "fmt"] }
+ts-rs = { version = "12", features = ["no-serde-warnings", "uuid-impl"], optional = true }
 url = "2"
 uuid = { version = "1", features = ["serde", "v4"] }
+
+[features]
+bindings = ["dep:ts-rs"]
