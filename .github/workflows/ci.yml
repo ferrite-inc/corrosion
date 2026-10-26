@@ -58,7 +58,7 @@ jobs:
         run: cargo clippy --locked --all-features -- -D warnings
 
       - if: &sdk ${{ github.event_name == 'workflow_dispatch' || steps.changes.outputs.rust == 'true' || steps.changes.outputs.sdk == 'true' }}
-        uses: voidzero-dev/setup-vp@v1.21.2
+        uses: voidzero-dev/setup-vp@v1.22.0
         with:
           working-directory: sdks/typescript
           node-version: "24"
