@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use axum::{
     Json, Router,
-    extract::{DefaultBodyLimit, Request, State},
+    extract::{Request, State},
     http::{
         StatusCode,
         header::{AUTHORIZATION, WWW_AUTHENTICATE},
@@ -25,7 +25,6 @@ pub(crate) fn router(runtime: Runtime, token: String) -> Router {
     Router::new()
         .nest("/api/v1", v1::router())
         .with_state(runtime)
-        .layer(DefaultBodyLimit::max(16 * 1024))
         .layer(middleware::from_fn_with_state(
             Arc::<str>::from(token),
             authenticate,
