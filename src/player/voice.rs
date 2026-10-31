@@ -23,15 +23,20 @@ impl VoiceParameters {
         session_id: String,
         token: String,
     ) -> Result<Self, Error> {
-        if !(1..=512).contains(&session_id.len())
-            || !(1..=4096).contains(&token.len())
-            || !(1..=512).contains(&endpoint.len())
-            || endpoint.contains(['/', '\\', '?', '#', '@'])
-            || endpoint.chars().any(char::is_whitespace)
+        if session_id.is_empty() || token.is_empty() {
+            return Err(Error::InvalidVoice);
+        }
+
+        // Reject URL delimiters and characters the parser may strip.
+        if endpoint.contains(['/', '\\', '?', '#', '@'])
+            || endpoint.contains(char::is_whitespace)
+            || endpoint.contains(char::is_control)
         {
             return Err(Error::InvalidVoice);
         }
+
         Url::parse(&format!("wss://{endpoint}")).map_err(|_| Error::InvalidVoice)?;
+
         Ok(Self {
             channel_id,
             endpoint,
