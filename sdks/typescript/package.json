@@ -17,7 +17,7 @@
     "prepublishOnly": "vp run generate:types && vp pack"
   },
   "dependencies": {
-    "eventsource": "^5.1.3",
+    "eventsource": "^5.1.4",
     "valibot": "^1.5.0"
   },
   "devDependencies": {
