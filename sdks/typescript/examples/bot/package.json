@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@corrosion/client": "workspace:*",
-    "discord.js": "^14.27.0"
+    "discord.js": "^14.28.0"
   },
   "engines": {
     "node": ">=24.17.0"
